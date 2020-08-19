@@ -342,8 +342,14 @@ gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127/go.mod h1:Co6ibVJAznAaIkqp8
 gopkg.in/cheggaaa/pb.v1 v1.0.27/go.mod h1:V/YB90LKu/1FcN3WVnfiiE5oMCibMjukxqG/qStrOgw=
 gopkg.in/yinzara/auth0.v4 v4.0.2 h1:m6hibCYWxNBRYhPuckIzaTpZjKnPs1p0Th/SJBeNAvw=
 gopkg.in/yinzara/auth0.v4 v4.0.2/go.mod h1:B9QUu0MG0np724IVcwWu/azhsckQ+3/niPVtQEThPlU=
+gopkg.in/yinzara/auth0.v4 v4.0.3-hook-secrets h1:EE35dfCvIQZ1Wq5NoxJ5as6NK/FMEg+nHYJXdsPLrP4=
+gopkg.in/yinzara/auth0.v4 v4.0.3-hook-secrets/go.mod h1:B9QUu0MG0np724IVcwWu/azhsckQ+3/niPVtQEThPlU=
+gopkg.in/yinzara/auth0.v4 v4.0.3-hook-secrets-2 h1:whEddrYpPIv+Fr6DNvTDHj84mwSx5emVgwUvMbH2O6Y=
+gopkg.in/yinzara/auth0.v4 v4.0.3-hook-secrets-2/go.mod h1:B9QUu0MG0np724IVcwWu/azhsckQ+3/niPVtQEThPlU=
 gopkg.in/yinzara/auth0.v4 v4.0.3 h1:eUnUKgTHR68YirMF0ufHGpz7i0pKk0m4jq2gyHV8gKo=
 gopkg.in/yinzara/auth0.v4 v4.0.3/go.mod h1:B9QUu0MG0np724IVcwWu/azhsckQ+3/niPVtQEThPlU=
+gopkg.in/yinzara/auth0.v4 v4.0.4-0.20200819215847-47c0d76fea3f h1:zJJplN6rkmH+FxNBJQmEqFFE/WxLWCXPH7OLpKhFb3A=
+gopkg.in/yinzara/auth0.v4 v4.0.4-0.20200819215847-47c0d76fea3f/go.mod h1:B9QUu0MG0np724IVcwWu/azhsckQ+3/niPVtQEThPlU=
 honnef.co/go/tools v0.0.0-20190102054323-c2f93a96b099/go.mod h1:rf3lG4BRIbNafJWhAfAdb/ePZxsR/4RtNHQocxwk9r4=
 honnef.co/go/tools v0.0.0-20190106161140-3f1c8253044a/go.mod h1:rf3lG4BRIbNafJWhAfAdb/ePZxsR/4RtNHQocxwk9r4=
 honnef.co/go/tools v0.0.0-20190418001031-e561f6794a2a/go.mod h1:rf3lG4BRIbNafJWhAfAdb/ePZxsR/4RtNHQocxwk9r4=

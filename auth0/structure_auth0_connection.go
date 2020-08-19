@@ -268,6 +268,11 @@ func expandConnectionOptionsSMS(d Data) *management.ConnectionOptionsSMS {
 		BruteForceProtection: BoolIfExists(d, "brute_force_protection"),
 		AuthParams:           StringMapIfExists(d, "auth_params"),
 	}
+	if o.MessagingServiceSID != nil && len(*o.MessagingServiceSID) > 0 {
+		// set From to nil if MessagingServiceSID is specified
+		// which causes "from": null which is required by the API
+		o.From = nil
+	}
 
 	ListIfExists(d, "totp").Elem(func(d Data) {
 		o.OTP = &management.ConnectionOptionsOTP{
