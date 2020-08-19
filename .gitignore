@@ -17,3 +17,4 @@ website/.bundle
 website/build
 website/node_modules
 .env
+vendor
