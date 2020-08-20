@@ -88,6 +88,15 @@ func (md MapData) HasChange(key string) bool {
 	return ok
 }
 
+func (md MapData) HasChanges(keys ...string) bool {
+	for _, key := range keys {
+		if md.HasChange(key) {
+			return true
+		}
+	}
+	return false
+}
+
 func (md MapData) GetChange(key string) (interface{}, interface{}) {
 	return md[key], md[key]
 }

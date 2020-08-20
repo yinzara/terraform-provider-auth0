@@ -1,13 +1,10 @@
 package auth0
 
 import (
-	"net/http"
-	"reflect"
-	"regexp"
-	"sort"
-
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
+	"net/http"
+	"regexp"
 
 	"gopkg.in/auth0.v4"
 	"gopkg.in/auth0.v4/management"
@@ -122,42 +119,73 @@ func upsertHookSecrets(d *schema.ResourceData, m interface{}) error {
 	if d.IsNewResource() || d.HasChange("secrets") {
 		secrets := MapIfExists(d, "secrets")
 		api := m.(*management.Management)
-		hookSecrets := management.HookSecrets{}
-		for key, value := range secrets {
-			if strVal, ok := value.(string); ok {
-				hookSecrets[key] = strVal
-			}
-		}
-		if !d.IsNewResource() {
-			if secretsBefore, err := api.Hook.Secrets(d.Id()); err == nil && secretsBefore != nil {
-				keysBefore := secretsBefore.Keys()
-				if len(secrets) > 0 && len(keysBefore) > 0 {
-					sort.Strings(keysBefore)
-					i := 0
-					keysNow := make([]string, len(secrets))
-					for k := range secrets {
-						keysNow[i] = k
-						i++
+		var secretsToAdd map[string]interface{}
+		if secretsBefore, err := api.Hook.Secrets(d.Id()); err == nil && secretsBefore != nil {
+			var keysToRemove []string
+			secretsToAdd = map[string]interface{}{}
+			secretsToUpdate := map[string]interface{}{}
+			keysBefore := secretsBefore.Keys()
+			keysNow := make([]string, len(secrets))
+			if len(secrets) > 0 {
+				i := 0
+				for k := range secrets {
+					keysNow[i] = k
+					keyFound := false
+					for _, beforeKey := range keysBefore {
+						if beforeKey == k {
+							keyFound = true
+							break
+						}
 					}
-					sort.Strings(keysNow)
-					if reflect.DeepEqual(keysBefore, keysNow) {
-						// can only update secrets if the keys are unchanged (i.e. you can't add a key)
-						return api.Hook.UpdateSecrets(d.Id(), &hookSecrets)
+					if keyFound {
+						secretsToUpdate[k] = secrets[k]
+					} else {
+						secretsToAdd[k] = secrets[k]
 					}
-				}
-				if len(keysBefore) > 0 {
-					// otherwise remove all the secrets before we try to create
-					if err := api.Hook.RemoveSecrets(d.Id(), keysBefore...); err != nil {
-						return err
-					}
+					i++
 				}
 			}
+			for _, beforeKey := range keysBefore {
+				keyFound := false
+				for _, nowKey := range keysNow {
+					if beforeKey == nowKey {
+						keyFound = true
+						break
+					}
+				}
+				if !keyFound {
+					keysToRemove = append(keysToRemove, beforeKey)
+				}
+			}
+			if len(keysToRemove) > 0 {
+				if err := api.Hook.RemoveSecrets(d.Id(), keysToRemove...); err != nil {
+					return err
+				}
+			}
+			if len(secretsToUpdate) > 0 {
+				if err := api.Hook.UpdateSecrets(d.Id(), toHookSecrets(secretsToUpdate)); err != nil {
+					return err
+				}
+			}
+		} else {
+			secretsToAdd = secrets
 		}
-		if len(secrets) > 0 {
-			return api.Hook.CreateSecrets(d.Id(), &hookSecrets)
+
+		if len(secretsToAdd) > 0 {
+			return api.Hook.CreateSecrets(d.Id(), toHookSecrets(secretsToAdd))
 		}
 	}
 	return nil
+}
+
+func toHookSecrets(val map[string]interface{}) *management.HookSecrets {
+	hookSecrets := management.HookSecrets{}
+	for key, value := range val {
+		if strVal, ok := value.(string); ok {
+			hookSecrets[key] = strVal
+		}
+	}
+	return &hookSecrets
 }
 
 func deleteHook(d *schema.ResourceData, m interface{}) error {
