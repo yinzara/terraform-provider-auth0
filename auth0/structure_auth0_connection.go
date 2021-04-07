@@ -158,6 +158,7 @@ func flattenConnectionOptionsSMS(o *management.ConnectionOptionsSMS) interface{}
 		"messaging_service_sid":  o.GetMessagingServiceSID(),
 		"disable_signup":         o.GetDisableSignup(),
 		"brute_force_protection": o.GetBruteForceProtection(),
+		"auth_params":            FromStringMap(o.AuthParams),
 		"totp": map[string]interface{}{
 			"time_step": o.OTP.GetTimeStep(),
 			"length":    o.OTP.GetLength(),
@@ -199,6 +200,7 @@ func flattenConnectionOptionsEmail(o *management.ConnectionOptionsEmail) interfa
 			"length":    o.OTP.GetLength(),
 		},
 		"set_user_root_attributes": o.GetSetUserAttributes(),
+		"auth_params":              FromStringMap(o.AuthParams),
 	}
 }
 
@@ -495,6 +497,7 @@ func expandConnectionOptionsSMS(d ResourceData) *management.ConnectionOptionsSMS
 		MessagingServiceSID:  String(d, "messaging_service_sid"),
 		DisableSignup:        Bool(d, "disable_signup"),
 		BruteForceProtection: Bool(d, "brute_force_protection"),
+		AuthParams:           StringMap(d, "auth_params"),
 	}
 
 	List(d, "totp").Elem(func(d ResourceData) {
@@ -508,7 +511,6 @@ func expandConnectionOptionsSMS(d ResourceData) *management.ConnectionOptionsSMS
 }
 
 func expandConnectionOptionsEmail(d ResourceData) *management.ConnectionOptionsEmail {
-
 	o := &management.ConnectionOptionsEmail{
 		Name:          String(d, "name"),
 		DisableSignup: Bool(d, "disable_signup"),
@@ -520,6 +522,7 @@ func expandConnectionOptionsEmail(d ResourceData) *management.ConnectionOptionsE
 		},
 		BruteForceProtection: Bool(d, "brute_force_protection"),
 		SetUserAttributes:    String(d, "set_user_root_attributes"),
+		AuthParams:           StringMap(d, "auth_params"),
 	}
 
 	List(d, "totp").Elem(func(d ResourceData) {

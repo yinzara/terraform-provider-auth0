@@ -573,6 +573,11 @@ var connectionSchema = map[string]*schema.Schema{
 					Optional:    true,
 					Description: "Sign Request Algorithm Digest",
 				},
+				"auth_params": {
+					Type:     schema.TypeMap,
+					Optional: true,
+					Elem:     &schema.Schema{Type: schema.TypeString},
+				},
 			},
 		},
 		Description: "Configuration settings for connection options",
@@ -663,7 +668,7 @@ func connectionSchemaUpgradeV1(state map[string]interface{}, meta interface{}) (
 		m := l[0].(map[string]interface{})
 
 		v, ok := m["validation"]
-		if !ok {
+		if !ok || v == nil {
 			return state, nil
 		}
 

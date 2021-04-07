@@ -264,6 +264,19 @@ func Map(d ResourceData, key string, conditions ...Condition) (m map[string]inte
 	return
 }
 
+// StringMap accesses the value held by key and type asserts it to a map with both key and values as strings.
+func StringMap(d ResourceData, key string, conditions ...Condition) (m map[string]string) {
+	v, ok := d.GetOk(key)
+	m = make(map[string]string)
+	if ok && Any(conditions...).Eval(d, key) {
+		val := v.(map[string]interface{})
+		for k, v := range val {
+			m[k] = v.(string)
+		}
+	}
+	return
+}
+
 // List accesses the value held by key and returns an iterator able to go over
 // its elements.
 func List(d ResourceData, key string, conditions ...Condition) Iterator {
@@ -316,6 +329,14 @@ func (l *list) List() []interface{} {
 type set struct {
 	d ResourceData
 	s *schema.Set
+}
+
+func FromStringMap(stringMap map[string]string) map[string]interface{} {
+	m := make(map[string]interface{})
+	for k, v := range stringMap {
+		m[k] = v
+	}
+	return m
 }
 
 func (s *set) hash(item interface{}) string {
