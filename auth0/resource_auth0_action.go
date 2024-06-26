@@ -86,8 +86,9 @@ func newAction() *schema.Resource {
 				ValidateFunc: validation.StringInSlice([]string{
 					"node12",
 					"node16",
+					"node18",
 				}, false),
-				Description: "The Node runtime. For example `node16`, defaults to `node12`",
+				Description: "\"The Node runtime. Defaults to `node18`. Possible values are: `node16` (not recommended), or `node18` (recommended).",
 			},
 			"secrets": {
 				Type:     schema.TypeList,
