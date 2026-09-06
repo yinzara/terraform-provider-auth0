@@ -582,13 +582,6 @@ var connectionSchema = map[string]*schema.Schema{
 		},
 		Description: "Configuration settings for connection options",
 	},
-	"enabled_clients": {
-		Type:        schema.TypeSet,
-		Elem:        &schema.Schema{Type: schema.TypeString},
-		Optional:    true,
-		Computed:    true,
-		Description: "IDs of the clients for which the connection is enabled",
-	},
 	"realms": {
 		Type:        schema.TypeList,
 		Elem:        &schema.Schema{Type: schema.TypeString},
@@ -716,7 +709,6 @@ func readConnection(d *schema.ResourceData, m interface{}) error {
 	d.Set("is_domain_connection", c.IsDomainConnection)
 	d.Set("strategy", c.Strategy)
 	d.Set("options", flattenConnectionOptions(d, c.Options))
-	d.Set("enabled_clients", c.EnabledClients)
 	d.Set("realms", c.Realms)
 	return nil
 }

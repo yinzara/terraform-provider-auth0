@@ -84,11 +84,11 @@ func newAction() *schema.Resource {
 				Optional: true,
 				Computed: true,
 				ValidateFunc: validation.StringInSlice([]string{
-					"node12",
 					"node16",
 					"node18",
+					"node22",
 				}, false),
-				Description: "\"The Node runtime. Defaults to `node18`. Possible values are: `node16` (not recommended), or `node18` (recommended).",
+				Description: "\"The Node runtime. Defaults to `node22`. Possible values are: `node16` (deprecated), `node18` (not recommended), or `node22` (recommended).",
 			},
 			"secrets": {
 				Type:     schema.TypeList,
